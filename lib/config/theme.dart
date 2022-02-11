@@ -6,3 +6,9 @@ Color darkGreyC = const Color(0XFF35373A);
 Color redC = const Color(0XFFD20000);
 Color greyC = const Color(0XFFC6C7C8);
 Color watchC = const Color(0XFF212428);
+
+TextStyle appBarStyle = const TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 25,
+  color: Colors.white,
+);
