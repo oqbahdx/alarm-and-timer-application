@@ -32,6 +32,8 @@ dependencies:
   flutter_bloc: ^8.0.1
   sqflite: ^2.0.2
   syncfusion_flutter_datepicker: ^19.4.50
+
+  fluttertoast: ^8.0.8
   flutter:
     sdk: flutter
 

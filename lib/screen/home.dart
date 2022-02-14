@@ -1,9 +1,9 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 import '../widget/Containers_widget.dart';
@@ -20,6 +20,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime now = DateTime.now();
   TextEditingController? eventController;
+  GlobalKey<ScaffoldState> _key = GlobalKey();
+  bool _open = false;
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         var bloc = AppCubit.get(context);
         return Scaffold(
+          key: _key,
           backgroundColor: blackC,
           appBar: AppBar(
             elevation: 0.0,
@@ -149,7 +152,12 @@ class _HomePageState extends State<HomePage> {
                         color: greyC,
                       ),
                       InkWell(
-                        onTap: () async {},
+                        onTap: () async {
+                         setState(() {
+                           _open = true;
+                         });
+
+                        },
                         child: Card(
                           shadowColor: Colors.white24,
                           elevation: 50.0,
@@ -178,11 +186,12 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                )
+                ),
+
               ],
             ),
           ),
-          bottomSheet: Builder(
+          bottomSheet:_open? Builder(
             builder: (BuildContext context) {
               return Container(
                 height: 210,
@@ -250,12 +259,30 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                     TextFormBuild(eventController: eventController,)
+                    TextFormBuild(eventController: eventController,)
                   ],
                 ),
               );
             },
-          ),
+          ):Container(height: 0.0,),
+           floatingActionButton:_open? FloatingActionButton(
+            onPressed: (){
+              if(bloc.newDate==null ){
+                Fluttertoast.showToast(msg: 'please fill all fields');
+              }else if(bloc.newTime==null){
+                Fluttertoast.showToast(msg: 'please fill all fields');
+              }else if(eventController?.text == null){
+                Fluttertoast.showToast(msg: 'please fill all fields');
+              }else{
+                setState(() {
+                  _open =false;
+                });
+              }
+
+            },
+            backgroundColor: blackC,
+            child:  Icon(Icons.save,size: 30,color: greyC,),
+          ):null,
         );
       },
     );
