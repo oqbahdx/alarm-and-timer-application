@@ -4,7 +4,10 @@ import 'package:alert/config/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+
+
+import '../widget/Containers_widget.dart';
+import '../widget/text_form_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,8 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime now = DateTime.now();
-  var formatter = DateFormat('EEEE');
-  TimeOfDay day = TimeOfDay.now();
+  TextEditingController? eventController;
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        var bloc = AppCubit.get(context);
         return Scaffold(
           backgroundColor: blackC,
           appBar: AppBar(
@@ -49,72 +52,12 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 100,
                 ),
-                Card(
-                  elevation: 50.0,
-                  color: watchC,
-                  shadowColor: Colors.white24,
-                  shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100)),
-                  child: Container(
-                    height: 250,
-                    width: 250,
-                    decoration: BoxDecoration(
-                        color: blackC,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Sunday",
-                            style: TextStyle(fontSize: 15, color: darkGreyC),
-                          ),
-                          Text(
-                            '${now.month}-${now.day}-${now.year}',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: greyC),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            '${now.hour - 12} : ${now.minute}',
-                            style: TextStyle(
-                                fontSize: 70,
-                                color: greyC,
-                                fontWeight: FontWeight.w900),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            '09:00',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: greyC,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Icon(
-                            Icons.alarm,
-                            color: redC,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                WatchContainer(watchText: '${now.hour}:${now.minute}',
+                  watchDate: '${now.day}-${now.month}-${now.year}',),
                 const SizedBox(
                   height: 50,
                 ),
-                Container(
+                SizedBox(
                   height: 160,
                   child: Column(
                     children: [
@@ -122,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                         'Mom Birthday',
                         style: TextStyle(color: darkGreyC, fontSize: 20),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Row(
@@ -211,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                           shadowColor: Colors.white24,
                           elevation: 50.0,
                           shape: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25)),
+                              borderRadius: BorderRadius.circular(15)),
                           child: Container(
                             child: Center(
                               child: Icon(
@@ -224,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                             width: 80,
                             decoration: BoxDecoration(
                               color: blackC,
-                              borderRadius: BorderRadius.circular(25),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                         ),
@@ -242,7 +185,7 @@ class _HomePageState extends State<HomePage> {
           bottomSheet: Builder(
             builder: (BuildContext context) {
               return Container(
-                height: 200,
+                height: 210,
                 decoration: BoxDecoration(
                   color: blackC,
                 ),
@@ -252,50 +195,62 @@ class _HomePageState extends State<HomePage> {
                       height: 15,
                     ),
                     AppCubit.get(context).newTime == null
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: InkWell(
-                              onTap: () {
-                                AppCubit.get(context).pickTime(
-                                    context: context,
-                                    hour: now.hour,
-                                    minute: now.minute);
-                              },
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Colors.white,
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'SELECT THE TIME',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
+                        ?  PickContainer(
+                      text: 'SELECT THE TIME',
+                      onTap: (){
+                        bloc.pickTime(context: context, hour: now.hour,
+                            minute: now.minute);
+                      },
+                    )
                         : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: Colors.white,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Time : ${AppCubit.get(context).newTime!.format(context).toString()}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ),
-                            ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Stack(
+                        children: [
+                          PickContainer(
+                            text:
+                            '${AppCubit.get(context).newTime?.format(context)}', onTap: () {
+
+                          },),
+                          DeleteIcon(
+                            onTap: () {
+                              setState(() {
+                                AppCubit.get(context).newTime = null;
+                              });
+                            },
                           )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    AppCubit.get(context).newDate == null
+                        ?  PickContainer(
+                      text: 'SELECT THE DATE',
+                      onTap: (){
+                        bloc.pickDate(context: context, dateTime: now);
+                      },
+                    )
+                        : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Stack(
+                        children: [
+                          PickContainer(
+                            text:
+                            '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}', onTap: () {  },
+                          ),
+                          DeleteIcon(onTap: () {
+                            setState(() {
+                              bloc.newDate = null;
+                            });
+                          },),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                     TextFormBuild(eventController: eventController,)
                   ],
                 ),
               );

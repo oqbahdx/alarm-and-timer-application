@@ -15,7 +15,14 @@ class AppCubit extends Cubit<AppStates> {
     );
       emit(PickTimeSuccessState());
   }
-
+  DateTime? newDate;
+    pickDate({required BuildContext context,required DateTime dateTime})async{
+      newDate = await  showDatePicker(
+        context: context,
+        initialDate: dateTime, lastDate: dateTime.add(const Duration(days: 356)), firstDate: dateTime,
+      );
+      emit(PickDateSuccessState());
+    }
   // pickDate({required BuildContext context , required DateTime dateTime})async{
   //
   //     final DateTime? picked = await showDatePicker(
