@@ -2,6 +2,7 @@
 
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
+import 'package:alert/events_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +67,7 @@ class AppCubit extends Cubit<AppStates> {
 
       print('database has been created successfully');
       await db.execute(
-          'CREATE TABLE events (id INTEGER PRIMARY KEY, event TEXT, date TEXT, time TEXT , status TEXT)');
+          'CREATE TABLE events (id INTEGER PRIMARY KEY, event TEXT, date Date, time TEXT , status Boolean)');
       print('table has been created successfully');
     }, onOpen: (database) {
       print('database opened');
@@ -78,11 +79,11 @@ class AppCubit extends Cubit<AppStates> {
       required String event,
       required String time,
       required String date,
-      required String status}) async {
+      required bool status}) async {
       await database?.transaction((txn) async {
         await txn.rawInsert(
           'INSERT INTO events (event, date, time,status) VALUES '
-              '("$event", "$time", "$date","$status" )').then((value){
+              '("$event", "$date", "$time","$status" )').then((value){
             if (kDebugMode) {
               print("value : "+value.toString());
 
@@ -100,8 +101,10 @@ class AppCubit extends Cubit<AppStates> {
 
 
   }
+  List<Map>? list;
   getAllEvents()async{
-    List<Map>? list = (await database?.rawQuery('SELECT * FROM events'))?.cast<Map>();
+     list = await database?.rawQuery('SELECT * FROM events');
     print("list : "+list.toString());
+
   }
 }

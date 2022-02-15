@@ -1,8 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../config/theme.dart';
-
-
 
 class ColumnBuild extends StatefulWidget {
   const ColumnBuild({Key? key}) : super(key: key);
@@ -53,13 +52,59 @@ class _ColumnBuildState extends State<ColumnBuild> {
     );
   }
 }
-Text textBuild({required String txt,required Color color ,required double size }){
-  return Text(txt,style: textBuildStyle(color: color, size: size),);
-}
-TextStyle textBuildStyle({required Color color ,required double size }){
-  return TextStyle(
-      color: color,
-      fontSize: size,
-      fontWeight: FontWeight.bold);
 
+Text textBuild(
+    {required String txt, required Color color, required double size}) {
+  return Text(
+    txt,
+    style: textBuildStyle(color: color, size: size),
+  );
+}
+
+TextStyle textBuildStyle({required Color color, required double size}) {
+  return TextStyle(color: color, fontSize: size, fontWeight: FontWeight.bold);
+}
+
+class EventListBuild extends StatefulWidget {
+  const EventListBuild(
+      {Key? key, required this.date, required this.time, required this.status})
+      : super(key: key);
+  final String date;
+  final String time;
+  final bool status;
+
+  @override
+  _EventListBuildState createState() => _EventListBuildState();
+}
+
+class _EventListBuildState extends State<EventListBuild> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '09:30',
+              style: TextStyle(
+                  color: greyC, fontSize: 45, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Weekends',
+              style: TextStyle(
+                  color: greyC, fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        CupertinoSwitch(
+          thumbColor: redC,
+          activeColor: blackC,
+          value: true,
+          onChanged: (bool value) {},
+        )
+      ],
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/screen/events_list.dart';
+import 'package:alert/screen/events_test.dart';
 import 'package:alert/screen/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         routes: {
           HomePage.id: (context) => const HomePage(),
           EventsPage.id: (context) => const EventsPage(),
+          EventsTest.id: (context) => const EventsTest(),
         },
       ),
     );

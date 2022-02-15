@@ -1,6 +1,8 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
+import 'package:alert/screen/events_list.dart';
+import 'package:alert/screen/events_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime now = DateTime.now();
-   TextEditingController eventController =TextEditingController();
+  TextEditingController eventController = TextEditingController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool _open = false;
 
@@ -27,8 +29,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     AppCubit.get(context).createDatabase();
-    AppCubit.get(context).getAllEvents();
-
   }
 
   @override
@@ -90,9 +90,15 @@ class _HomePageState extends State<HomePage> {
                           },
                           child: const MenuBuild(),
                         ),
-                        Icon(
-                          Icons.menu,
-                          color: greyC,
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const EventsTest()));
+                          },
+                          child: Icon(
+                            Icons.menu,
+                            color: greyC,
+                          ),
                         )
                       ],
                     ),
@@ -191,22 +197,20 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: _open
               ? FloatingActionButton(
                   onPressed: () {
-
-                      bloc.insetData(
-                          event: eventController.text.toString(),
-                          time: '${bloc.newTime?.format(context).toString()}',
-                          date:
-                          "${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}",
-                          status: 'true');
-                    bloc.insetData(event: 'event', time: 'time', date: 'date', status: 'status');
-                      setState(() {
-                        _open = false;
-                         bloc.newTime =null;
-                         bloc.newDate=null;
-                         eventController?.text ='';
-                      });
-                    },
-
+                    bloc.insetData(
+                        event: eventController.text.toString(),
+                        time: '${bloc.newTime?.format(context).toString()}',
+                        date:
+                            "${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}",
+                        status: true);
+                    setState(() {
+                      _open = false;
+                      bloc.newTime = null;
+                      bloc.newDate = null;
+                      eventController.text = '';
+                    });
+                    AppCubit.get(context).getAllEvents();
+                  },
                   backgroundColor: blackC,
                   child: Icon(
                     Icons.save,

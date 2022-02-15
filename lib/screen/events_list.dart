@@ -1,7 +1,10 @@
+import 'package:alert/bloc/cubit.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/widget/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../widget/views.dart';
 
 
 class EventsPage extends StatefulWidget {
@@ -13,75 +16,27 @@ static String id = "EventsPage";
 
 class _EventsPageState extends State<EventsPage> {
   @override
+  void initState() {
+
+    super.initState();
+    AppCubit.get(context).getAllEvents();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarBuild(title: 'Events List'),
       backgroundColor: blackC,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20,),
             const Text('Alarms',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
             const SizedBox(height: 30,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-
-                Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('09:30',style: TextStyle(
-                      color: greyC,
-                      fontSize: 45,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    Text('Weekends',style: TextStyle(
-                        color: greyC,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold
-                    ),),
-                  ],
-                ),
-                CupertinoSwitch(
-                  thumbColor: redC,
-                  activeColor: blackC,
-                  value: true,onChanged: (bool value){
-
-                },)
-              ],
-            ),
+            const EventListBuild(time: '9:30', date: 'weekends', status: true,),
             const SizedBox(height: 30,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
 
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('06:30',style:  TextStyle(
-                        color: Colors.white,
-                        fontSize: 45,
-                        fontWeight: FontWeight.bold
-                    ),),
-                    Align(
-                      child: Text('Mon-Fri',style: TextStyle(
-                          color: greyC,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold
-                      ),),
-                    ),
-                  ],
-                ),
-                CupertinoSwitch(
-                  thumbColor: greenC
-                  ,
-                  activeColor: blackC,
-                  value: false,onChanged: (bool value){
-
-                },)
-              ],
-            ),
             const SizedBox(height: 25,),
             Card(
               shape: OutlineInputBorder(
@@ -131,6 +86,7 @@ class _EventsPageState extends State<EventsPage> {
 
             ),
             const SizedBox(height: 10,),
+            const Spacer(),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
