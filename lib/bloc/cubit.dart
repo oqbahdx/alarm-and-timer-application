@@ -102,9 +102,21 @@ class AppCubit extends Cubit<AppStates> {
 
   }
   List<Map>? list;
+  List<EventsModel> eventsList = [];
   getAllEvents()async{
-     list = await database?.rawQuery('SELECT * FROM events');
-    print("list : "+list.toString());
+    eventsList = [];
+     list = await database?.rawQuery('SELECT * FROM events').then((value){
+       for (var element in value) {
+         eventsList.add(EventsModel.fromJson(element));
+       }
+     });
+    if (kDebugMode) {
+      print(eventsList);
+    }
 
+  }
+
+  deleteEvent({int? id})async{
+    await database?.rawDelete('DELETE FROM events WHERE id = "$id"');
   }
 }

@@ -130,24 +130,20 @@ class _HomePageState extends State<HomePage> {
                                         minute: now.minute);
                                   },
                                 )
-                              : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Stack(
-                                    children: [
-                                      PickContainer(
-                                        text:
-                                            '${AppCubit.get(context).newTime?.format(context)}',
-                                        onTap: () {},
-                                      ),
-                                      DeleteIcon(
-                                        onTap: () {
-                                          bloc.clearTime();
-                                        },
-                                      )
-                                    ],
+                              : Stack(
+                                children: [
+                                  PickContainer(
+                                    text:
+                                        '${AppCubit.get(context).newTime?.format(context)}',
+                                    onTap: () {},
                                   ),
-                                ),
+                                  DeleteIcon(
+                                    onTap: () {
+                                      bloc.clearTime();
+                                    },
+                                  )
+                                ],
+                              ),
                           const SizedBox(
                             height: 15,
                           ),
@@ -159,27 +155,23 @@ class _HomePageState extends State<HomePage> {
                                         context: context, dateTime: now);
                                   },
                                 )
-                              : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Stack(
-                                    children: [
-                                      PickContainer(
-                                        text:
-                                            '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}',
-                                        onTap: () {},
-                                      ),
-                                      DeleteIcon(
-                                        onTap: () {
-                                          // setState(() {
-                                          //   bloc.newDate = null;
-                                          // });
-                                          bloc.clearDate();
-                                        },
-                                      ),
-                                    ],
+                              : Stack(
+                                children: [
+                                  PickContainer(
+                                    text:
+                                        '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}',
+                                    onTap: () {},
                                   ),
-                                ),
+                                  DeleteIcon(
+                                    onTap: () {
+                                      // setState(() {
+                                      //   bloc.newDate = null;
+                                      // });
+                                      bloc.clearDate();
+                                    },
+                                  ),
+                                ],
+                              ),
                           const SizedBox(
                             height: 10,
                           ),

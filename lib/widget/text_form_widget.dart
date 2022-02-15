@@ -22,13 +22,13 @@ class _TextFormBuildState extends State<TextFormBuild> {
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
         style: const TextStyle(
-            color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
           hintText: 'ENTER THE EVENT',
           hintStyle: const TextStyle(
-          color: Colors.black87,  fontSize: 24, fontWeight: FontWeight.bold),
+          color: Colors.black87,  fontSize: 22, fontWeight: FontWeight.bold),
           // labelText: 'label text',
           //   label: Center(child: Text('ENTER THE EVENT')),
           // label: const Center(
@@ -39,7 +39,7 @@ class _TextFormBuildState extends State<TextFormBuild> {
           // ),
 
           labelStyle: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
           ),

@@ -1,3 +1,4 @@
+import 'package:alert/events_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -67,11 +68,10 @@ TextStyle textBuildStyle({required Color color, required double size}) {
 
 class EventListBuild extends StatefulWidget {
   const EventListBuild(
-      {Key? key, required this.date, required this.time, required this.status})
+      {Key? key,required this.model, })
       : super(key: key);
-  final String date;
-  final String time;
-  final bool status;
+
+  final EventsModel model;
 
   @override
   _EventListBuildState createState() => _EventListBuildState();
@@ -87,22 +87,25 @@ class _EventListBuildState extends State<EventListBuild> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '09:30',
+              widget.model.time.toString(),
               style: TextStyle(
                   color: greyC, fontSize: 45, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Weekends',
+              widget.model.date.toString(),
               style: TextStyle(
                   color: greyC, fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ],
         ),
         CupertinoSwitch(
-          thumbColor: redC,
-          activeColor: blackC,
+          thumbColor: greenC,
+          activeColor: greyC,
+          trackColor: greyC,
           value: true,
-          onChanged: (bool value) {},
+          onChanged: (bool value) {
+
+          },
         )
       ],
     );
