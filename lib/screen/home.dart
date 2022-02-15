@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widget/Containers_widget.dart';
 import '../widget/text_form_widget.dart';
+import '../widget/views.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,14 +19,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime now = DateTime.now();
-  TextEditingController? eventController;
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+   TextEditingController eventController =TextEditingController();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool _open = false;
 
   @override
   void initState() {
     super.initState();
     AppCubit.get(context).createDatabase();
+    AppCubit.get(context).getAllEvents();
+
   }
 
   @override
@@ -67,88 +70,9 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 50,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 160,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Mom Birthday',
-                          style: TextStyle(color: darkGreyC, fontSize: 20),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  '14',
-                                  style: TextStyle(
-                                      color: greyC,
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'Days',
-                                  style:
-                                      TextStyle(color: darkGreyC, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  '15',
-                                  style: TextStyle(
-                                      color: greyC,
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'Hours',
-                                  style:
-                                      TextStyle(color: darkGreyC, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  '35',
-                                  style: TextStyle(
-                                      color: greyC,
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'Mins',
-                                  style:
-                                      TextStyle(color: darkGreyC, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  '15',
-                                  style: TextStyle(
-                                      color: greyC,
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'Sec',
-                                  style:
-                                      TextStyle(color: darkGreyC, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                    child: ColumnBuild(),
                   ),
                   Center(
                     child: Row(
@@ -164,27 +88,7 @@ class _HomePageState extends State<HomePage> {
                               _open = true;
                             });
                           },
-                          child: Card(
-                            shadowColor: Colors.white24,
-                            elevation: 50.0,
-                            shape: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Container(
-                              child: Center(
-                                child: Icon(
-                                  Icons.add,
-                                  color: greyC,
-                                  size: 50,
-                                ),
-                              ),
-                              height: 80,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                color: blackC,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                            ),
-                          ),
+                          child: const MenuBuild(),
                         ),
                         Icon(
                           Icons.menu,
@@ -289,16 +193,17 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
 
                       bloc.insetData(
-                          event: 'eventController?.text',
-                          time: '${bloc.newTime?.format(context)}',
+                          event: eventController.text.toString(),
+                          time: '${bloc.newTime?.format(context).toString()}',
                           date:
-                              '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}',
+                          "${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}",
                           status: 'true');
+                    bloc.insetData(event: 'event', time: 'time', date: 'date', status: 'status');
                       setState(() {
                         _open = false;
-                        // bloc.newTime =null;
-                        // bloc.newDate=null;
-                        // eventController?.text ='';
+                         bloc.newTime =null;
+                         bloc.newDate=null;
+                         eventController?.text ='';
                       });
                     },
 

@@ -126,3 +126,33 @@ class WatchContainer extends StatelessWidget {
     );
   }
 }
+
+class MenuBuild extends StatelessWidget {
+  const MenuBuild({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shadowColor: Colors.white24,
+      elevation: 50.0,
+      shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15)),
+      child: Container(
+        child: Center(
+          child: Icon(
+            Icons.add,
+            color: greyC,
+            size: 50,
+          ),
+        ),
+        height: 80,
+        width: 80,
+        decoration: BoxDecoration(
+          color: blackC,
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+    );
+  }
+}
+

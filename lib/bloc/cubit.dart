@@ -2,6 +2,7 @@
 
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
@@ -62,6 +63,7 @@ class AppCubit extends Cubit<AppStates> {
   createDatabase() async {
      database = await openDatabase('alarms.db', version: 1,
         onCreate: (Database db, int version) async {
+
       print('database has been created successfully');
       await db.execute(
           'CREATE TABLE events (id INTEGER PRIMARY KEY, event TEXT, date TEXT, time TEXT , status TEXT)');
@@ -71,23 +73,35 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  insetData(
+ Future insetData(
       {
-      required String? event,
-      required String? time,
-      required String? date,
+      required String event,
+      required String time,
+      required String date,
       required String status}) async {
       await database?.transaction((txn) async {
-       await txn.rawInsert(
-          'INSERT INTO events(event, date, time,status) VALUES($event, $time, $date,$status)').then((value){
-            print(value.toString());
+        await txn.rawInsert(
+          'INSERT INTO events (event, date, time,status) VALUES '
+              '("$event", "$time", "$date","$status" )').then((value){
+            if (kDebugMode) {
+              print("value : "+value.toString());
+
+            }
             emit(InsertDataSuccessState());
        }).catchError((err){
-         print( "err : " + err.toString());
+         if (kDebugMode) {
+           print( "err : " + err.toString());
+         }
          emit(InsertDataErrorState(err.toString()));
        });
 
 
     });
+
+
+  }
+  getAllEvents()async{
+    List<Map>? list = (await database?.rawQuery('SELECT * FROM events'))?.cast<Map>();
+    print("list : "+list.toString());
   }
 }
