@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                         event: eventController.text.toString(),
                         time: '${bloc.newTime?.format(context).toString()}',
                         date:
-                            '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}',
+                            '${bloc.newDate?.day}-${bloc.newDate?.month}-${bloc.newDate?.year}',
                         status: true).then((value){
                           setState(() {
                             _open = false;

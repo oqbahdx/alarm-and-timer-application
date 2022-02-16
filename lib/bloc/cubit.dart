@@ -87,6 +87,9 @@ class AppCubit extends Cubit<AppStates> {
           .then((value) {
         if (kDebugMode) {
           print("value : " + value.toString());
+          print("event : " +event);
+          print("date : " + date);
+          print("time : " + time);
         }
         emit(InsertDataSuccessState());
       }).catchError((err) {

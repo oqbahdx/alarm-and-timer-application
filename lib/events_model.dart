@@ -9,6 +9,7 @@ class EventsModel{
    EventsModel.fromJson(Map<dynamic,dynamic>json){
     id = json['id'];
     event = json['event'];
+    date = json['date'];
     time = json['time'];
     status = json['status'];
 
