@@ -96,13 +96,18 @@ class _EventListBuildState extends State<EventListBuild> {
               style: TextStyle(
                   color: greyC, fontSize: 12, fontWeight: FontWeight.bold),
             ),
+            Text(
+              widget.model.event.toString(),
+              style: TextStyle(
+                  color: greyC, fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         CupertinoSwitch(
-          thumbColor: greenC,
+          thumbColor: widget.model.status == 'true'?greenC:redC,
           activeColor: greyC,
           trackColor: greyC,
-          value: true,
+          value: widget.model.status == 'true'?true:false,
           onChanged: (bool value) {
 
           },

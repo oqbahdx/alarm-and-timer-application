@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
@@ -6,6 +8,7 @@ import 'package:alert/screen/events_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../widget/Containers_widget.dart';
 import '../widget/text_form_widget.dart';
@@ -29,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     AppCubit.get(context).createDatabase();
+    AppCubit.get(context).timeString =  AppCubit.get(context).formatDateTime(DateTime.now());
+    Timer.periodic(const Duration(seconds: 1), (Timer t) =>  AppCubit.get(context).getTime());
   }
 
   @override
@@ -64,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                     height: 100,
                   ),
                   WatchContainer(
-                    watchText: '${now.hour}:${now.minute}',
+                    watchText: '${AppCubit.get(context).timeString}',
                     watchDate: '${now.day}-${now.month}-${now.year}',
                   ),
                   const SizedBox(
@@ -131,19 +136,19 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 )
                               : Stack(
-                                children: [
-                                  PickContainer(
-                                    text:
-                                        '${AppCubit.get(context).newTime?.format(context)}',
-                                    onTap: () {},
-                                  ),
-                                  DeleteIcon(
-                                    onTap: () {
-                                      bloc.clearTime();
-                                    },
-                                  )
-                                ],
-                              ),
+                                  children: [
+                                    PickContainer(
+                                      text:
+                                          '${AppCubit.get(context).newTime?.format(context)}',
+                                      onTap: () {},
+                                    ),
+                                    DeleteIcon(
+                                      onTap: () {
+                                        bloc.clearTime();
+                                      },
+                                    )
+                                  ],
+                                ),
                           const SizedBox(
                             height: 15,
                           ),
@@ -156,22 +161,24 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 )
                               : Stack(
-                                children: [
-                                  PickContainer(
-                                    text:
-                                        '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}',
-                                    onTap: () {},
-                                  ),
-                                  DeleteIcon(
-                                    onTap: () {
-                                      // setState(() {
-                                      //   bloc.newDate = null;
-                                      // });
-                                      bloc.clearDate();
-                                    },
-                                  ),
-                                ],
-                              ),
+                                  children: [
+                                    PickContainer(
+                                      text:
+                                          '${bloc.newDate?.day.toString()}'
+                                              '-${bloc.newDate?.month.toString()}'
+                                              '-${bloc.newDate?.year.toString()}',
+                                      onTap: () { },
+                                    ),
+                                    DeleteIcon(
+                                      onTap: () {
+                                        // setState(() {
+                                        //   bloc.newDate = null;
+                                        // });
+                                        bloc.clearDate();
+                                      },
+                                    ),
+                                  ],
+                                ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -193,15 +200,18 @@ class _HomePageState extends State<HomePage> {
                         event: eventController.text.toString(),
                         time: '${bloc.newTime?.format(context).toString()}',
                         date:
-                            "${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}",
-                        status: true);
-                    setState(() {
-                      _open = false;
-                      bloc.newTime = null;
-                      bloc.newDate = null;
-                      eventController.text = '';
+                            '${bloc.newDate?.day.toString()}-${bloc.newDate?.month.toString()}-${bloc.newDate?.year.toString()}',
+                        status: true).then((value){
+                          setState(() {
+                            _open = false;
+                            bloc.clearTime();
+                            bloc.clearDate();
+                            eventController.text = '';
+                          });
+                          AppCubit.get(context).getAllEvents();
+
                     });
-                    AppCubit.get(context).getAllEvents();
+
                   },
                   backgroundColor: blackC,
                   child: Icon(

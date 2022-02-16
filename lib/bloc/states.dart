@@ -12,3 +12,5 @@ class InsertDataErrorState extends AppStates{
   late final String error;
   InsertDataErrorState(this.error);
 }
+
+class RealTimeWatchState extends AppStates{}
