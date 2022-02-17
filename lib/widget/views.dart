@@ -68,10 +68,12 @@ TextStyle textBuildStyle({required Color color, required double size}) {
 
 class EventListBuild extends StatefulWidget {
   const EventListBuild(
-      {Key? key,required this.model, })
+      {Key? key,required this.model, required this.onDismissed,required this.itemKey, })
       : super(key: key);
 
   final EventsModel model;
+   final Function(DismissDirection)? onDismissed;
+   final Key itemKey;
 
   @override
   _EventListBuildState createState() => _EventListBuildState();
@@ -80,39 +82,47 @@ class EventListBuild extends StatefulWidget {
 class _EventListBuildState extends State<EventListBuild> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding:  const EdgeInsets.symmetric(vertical: 10),
+      child: Dismissible(
+        key: widget.itemKey,
+        direction: DismissDirection.horizontal,
+        onDismissed: widget.onDismissed,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.model.time.toString(),
-              style: TextStyle(
-                  color: greyC, fontSize: 45, fontWeight: FontWeight.bold),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.model.time.toString(),
+                  style: TextStyle(
+                      color:widget.model.status=='true'?Colors.white: greyC, fontSize: 45, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  widget.model.date.toString(),
+                  style: TextStyle(
+                      color:widget.model.status=='true'?Colors.white: greyC, fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  widget.model.event.toString(),
+                  style: TextStyle(
+                      color: widget.model.status=='true'?Colors.white:greyC, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-            Text(
-              widget.model.date.toString(),
-              style: TextStyle(
-                  color: greyC, fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              widget.model.event.toString(),
-              style: TextStyle(
-                  color: greyC, fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            CupertinoSwitch(
+              thumbColor: widget.model.status == 'true'?greenC:redC,
+              activeColor: greyC,
+              trackColor: greyC,
+              value: widget.model.status == 'true'?true:false,
+              onChanged: (bool value) {
+
+              },
+            )
           ],
         ),
-        CupertinoSwitch(
-          thumbColor: widget.model.status == 'true'?greenC:redC,
-          activeColor: greyC,
-          trackColor: greyC,
-          value: widget.model.status == 'true'?true:false,
-          onChanged: (bool value) {
-
-          },
-        )
-      ],
+      ),
     );
   }
 }

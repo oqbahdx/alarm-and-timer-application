@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                         InkWell(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const EventsTest()));
+                                builder: (context) => const EventsPage()));
                           },
                           child: Icon(
                             Icons.menu,

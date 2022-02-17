@@ -1,7 +1,6 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/screen/events_list.dart';
-import 'package:alert/screen/events_test.dart';
 import 'package:alert/screen/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppCubit(),
+      create: (context) => AppCubit()..createDatabase()..getAllEvents(),
       child: MaterialApp(
         theme: ThemeData(
           timePickerTheme: TimePickerColors.timePickerTheme,
@@ -35,7 +34,6 @@ class MyApp extends StatelessWidget {
         routes: {
           HomePage.id: (context) => const HomePage(),
           EventsPage.id: (context) => const EventsPage(),
-          EventsTest.id: (context) => const EventsTest(),
         },
       ),
     );

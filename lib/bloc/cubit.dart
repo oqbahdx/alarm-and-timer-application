@@ -117,7 +117,12 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   deleteEvent({int? id}) async {
-    await database?.rawDelete("DELETE FROM events WHERE id = '$id' ");
+    await database?.rawDelete("DELETE FROM events WHERE id = $id ").then((value){
+      print(value.toString());
+      print("id : ${value.toString()} has been deleted successfully");
+    }).catchError((err){
+      print('failed to delete item');
+    });
   }
   dropTable()async{
     await database?.delete('events').then((value){
