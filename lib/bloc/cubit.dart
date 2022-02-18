@@ -1,6 +1,6 @@
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
-import 'package:alert/events_model.dart';
+import 'package:alert/model/events_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,32 +74,29 @@ class AppCubit extends Cubit<AppStates> {
       print('database opened');
     });
   }
-
   Future insetData(
       {required String event,
-      required String time,
-      required String date,
-      required bool status}) async {
+        required String time,
+        required String date,
+        required bool status}) async {
     await database?.transaction((txn) async {
       await txn
           .rawInsert('INSERT INTO events (event, date, time,status) VALUES '
-              '("$event", "$date", "$time","$status" )')
+          '("$event", "$date", "$time","$status" )')
           .then((value) {
-        if (kDebugMode) {
-          print("value : " + value.toString());
-          print("event : " +event);
-          print("date : " + date);
-          print("time : " + time);
-        }
+        print("value : " + value.toString());
         emit(InsertDataSuccessState());
+
       }).catchError((err) {
         if (kDebugMode) {
           print("err : " + err.toString());
+          emit(InsertDataErrorState(err.toString()));
         }
-        emit(InsertDataErrorState(err.toString()));
+
       });
     });
   }
+
 
   List<Map>? list;
   List<EventsModel> eventsList = [];
@@ -123,6 +120,15 @@ class AppCubit extends Cubit<AppStates> {
     }).catchError((err){
       print('failed to delete item');
     });
+  }
+  updateEvent({String? status,int? id })async{
+      await database?.rawUpdate(
+        "UPDATE events SET status = '$status' WHERE id = $id ").then((value){
+          print('events has been updated successfully');
+          getAllEvents();
+      }).catchError((err){
+        print(err.toString());
+      });
   }
   dropTable()async{
     await database?.delete('events').then((value){

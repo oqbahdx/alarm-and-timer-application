@@ -24,6 +24,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime now = DateTime.now();
+  var day;
+
   TextEditingController eventController = TextEditingController();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool _open = false;
@@ -31,9 +33,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    day = DateFormat('EEEE').format(now);
     AppCubit.get(context).createDatabase();
-    AppCubit.get(context).timeString =  AppCubit.get(context).formatDateTime(DateTime.now());
-    Timer.periodic(const Duration(seconds: 1), (Timer t) =>  AppCubit.get(context).getTime());
+    AppCubit.get(context).timeString =
+        AppCubit.get(context).formatDateTime(DateTime.now());
+    Timer.periodic(const Duration(seconds: 1),
+        (Timer t) => AppCubit.get(context).getTime());
   }
 
   @override
@@ -69,6 +74,7 @@ class _HomePageState extends State<HomePage> {
                     height: 100,
                   ),
                   WatchContainer(
+                    dayText: day.toString(),
                     watchText: '${AppCubit.get(context).timeString}',
                     watchDate: '${now.day}-${now.month}-${now.year}',
                   ),
@@ -99,6 +105,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const EventsPage()));
+                            bloc.getAllEvents();
                           },
                           child: Icon(
                             Icons.menu,
@@ -163,11 +170,10 @@ class _HomePageState extends State<HomePage> {
                               : Stack(
                                   children: [
                                     PickContainer(
-                                      text:
-                                          '${bloc.newDate?.day.toString()}'
-                                              '-${bloc.newDate?.month.toString()}'
-                                              '-${bloc.newDate?.year.toString()}',
-                                      onTap: () { },
+                                      text: '${bloc.newDate?.day.toString()}'
+                                          '-${bloc.newDate?.month.toString()}'
+                                          '-${bloc.newDate?.year.toString()}',
+                                      onTap: () {},
                                     ),
                                     DeleteIcon(
                                       onTap: () {
@@ -194,14 +200,31 @@ class _HomePageState extends State<HomePage> {
                   height: 0.0,
                 ),
           floatingActionButton: _open
-              ? FloatingActionButton(
-                  onPressed: () {
-                    bloc.insetData(
-                        event: eventController.text.toString(),
-                        time: '${bloc.newTime?.format(context).toString()}',
-                        date:
-                            '${bloc.newDate?.day}-${bloc.newDate?.month}-${bloc.newDate?.year}',
-                        status: true).then((value){
+              ? bloc.newTime  == null
+                  ? FloatingActionButton(
+                      backgroundColor: blackC,
+                      onPressed: () {
+                        setState(() {
+                          _open = false;
+                        });
+                      },
+                      child: Icon(
+                        Icons.arrow_downward_sharp,
+                        size: 30,
+                        color: greyC,
+                      ),
+                    )
+                  : FloatingActionButton(
+                      onPressed: () {
+                        bloc
+                            .insetData(
+                                event: eventController.text.toString(),
+                                time:
+                                    '${bloc.newTime?.format(context).toString()}',
+                                date:
+                                    '${bloc.newDate?.day}-${bloc.newDate?.month}-${bloc.newDate?.year}',
+                                status: true)
+                            .then((value) {
                           setState(() {
                             _open = false;
                             bloc.clearTime();
@@ -209,17 +232,15 @@ class _HomePageState extends State<HomePage> {
                             eventController.text = '';
                           });
                           AppCubit.get(context).getAllEvents();
-
-                    });
-
-                  },
-                  backgroundColor: blackC,
-                  child: Icon(
-                    Icons.save,
-                    size: 30,
-                    color: greyC,
-                  ),
-                )
+                        });
+                      },
+                      backgroundColor: blackC,
+                      child: Icon(
+                        Icons.save,
+                        size: 30,
+                        color: greyC,
+                      ),
+                    )
               : null,
         );
       },

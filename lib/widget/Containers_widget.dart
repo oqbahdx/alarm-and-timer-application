@@ -57,9 +57,12 @@ class DeleteIcon extends StatelessWidget {
 }
 
 class WatchContainer extends StatelessWidget {
-  const WatchContainer({Key? key, required this.watchDate,required this.watchText}) : super(key: key);
+  const WatchContainer({Key? key,
+    required this.dayText,
+    required this.watchDate,required this.watchText}) : super(key: key);
   final String watchDate;
   final String watchText;
+  final String dayText;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -78,11 +81,14 @@ class WatchContainer extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               Text(
-                "Sunday",
-                style: TextStyle(fontSize: 15, color: darkGreyC),
+                dayText,
+                style: TextStyle(fontSize: 15, color: greyC,fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Text(
                 watchDate,

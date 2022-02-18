@@ -18,12 +18,6 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   @override
-  void initState() {
-    super.initState();
-    AppCubit.get(context).getAllEvents();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
@@ -56,12 +50,13 @@ class _EventsPageState extends State<EventsPage> {
                     itemCount: bloc.eventsList.length,
                     itemBuilder: (context, index) => EventListBuild(
                           model: model[index],
-                      onDismissed: (onDismissed){
+                          onDismissed: (onDismissed) {
                             setState(() {
                               bloc.deleteEvent(id: model[index].id);
                               bloc.eventsList.removeAt(index);
                             });
-                      }, itemKey: Key(model[index].id.toString()),
+                          },
+                          itemKey: Key(model[index].id.toString()),
                         )),
               ],
             ),

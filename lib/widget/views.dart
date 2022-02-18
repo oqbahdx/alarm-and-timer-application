@@ -1,4 +1,5 @@
-import 'package:alert/events_model.dart';
+import 'package:alert/bloc/cubit.dart';
+import 'package:alert/model/events_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -67,13 +68,16 @@ TextStyle textBuildStyle({required Color color, required double size}) {
 }
 
 class EventListBuild extends StatefulWidget {
-  const EventListBuild(
-      {Key? key,required this.model, required this.onDismissed,required this.itemKey, })
-      : super(key: key);
+  const EventListBuild({
+    Key? key,
+    required this.model,
+    required this.onDismissed,
+    required this.itemKey,
+  }) : super(key: key);
 
   final EventsModel model;
-   final Function(DismissDirection)? onDismissed;
-   final Key itemKey;
+  final Function(DismissDirection)? onDismissed;
+  final Key itemKey;
 
   @override
   _EventListBuildState createState() => _EventListBuildState();
@@ -83,8 +87,17 @@ class _EventListBuildState extends State<EventListBuild> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Dismissible(
+        background: Container(
+          color: redC,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+            Icon(Icons.delete,size: 50,color: Colors.white,),
+            Icon(Icons.delete,size: 50,color: Colors.white,)
+          ],),
+        ),
         key: widget.itemKey,
         direction: DismissDirection.horizontal,
         onDismissed: widget.onDismissed,
@@ -97,27 +110,39 @@ class _EventListBuildState extends State<EventListBuild> {
                 Text(
                   widget.model.time.toString(),
                   style: TextStyle(
-                      color:widget.model.status=='true'?Colors.white: greyC, fontSize: 45, fontWeight: FontWeight.bold),
+                      color:
+                          widget.model.status == 'true' ? Colors.white : greyC,
+                      fontSize: 45,
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.model.date.toString(),
                   style: TextStyle(
-                      color:widget.model.status=='true'?Colors.white: greyC, fontSize: 12, fontWeight: FontWeight.bold),
+                      color:
+                          widget.model.status == 'true' ? Colors.white : greyC,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
                   widget.model.event.toString(),
                   style: TextStyle(
-                      color: widget.model.status=='true'?Colors.white:greyC, fontSize: 20, fontWeight: FontWeight.bold),
+                      color:
+                          widget.model.status == 'true' ? Colors.white : greyC,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             CupertinoSwitch(
-              thumbColor: widget.model.status == 'true'?greenC:redC,
+              thumbColor: widget.model.status == 'true' ? greenC : redC,
               activeColor: greyC,
               trackColor: greyC,
-              value: widget.model.status == 'true'?true:false,
+              value: widget.model.status == 'true' ? true : false,
               onChanged: (bool value) {
-
+                setState(() {
+                  AppCubit.get(context).updateEvent(
+                      status: value ? 'true' : 'false', id: widget.model.id);
+                });
               },
             )
           ],
