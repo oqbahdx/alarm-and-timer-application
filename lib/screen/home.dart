@@ -4,7 +4,6 @@ import 'package:alert/bloc/cubit.dart';
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/screen/events_list.dart';
-import 'package:alert/screen/events_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,7 +46,7 @@ class _HomePageState extends State<HomePage> {
       listener: (context, state) {
         if (state is InsertDataSuccessState) {
           Fluttertoast.showToast(
-              msg: 'New Alarm Saved', backgroundColor: Colors.teal);
+              msg: 'New Alarm Saved', backgroundColor: Colors.teal,fontSize: 20);
         }
       },
       builder: (context, state) {

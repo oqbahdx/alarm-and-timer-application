@@ -5,6 +5,8 @@ import 'package:alert/widget/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../widget/views.dart';
 
@@ -17,6 +19,13 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
+  @override
+  void initState() {
+    super.initState();
+    AppCubit.get(context).formattedDate =
+        DateFormat('dd-M-yyyy kk:mm a').format(AppCubit.get(context).myDate);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
@@ -48,15 +57,32 @@ class _EventsPageState extends State<EventsPage> {
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: bloc.eventsList.length,
-                    itemBuilder: (context, index) => EventListBuild(
-                          model: model[index],
-                          onDismissed: (onDismissed) {
-                            setState(() {
-                              bloc.deleteEvent(id: model[index].id);
-                              bloc.eventsList.removeAt(index);
-                            });
+                    itemBuilder: (context, index) => InkWell(
+                          onTap: () {
+                             print(AppCubit.get(context).formattedDate);
+                             print("${model[index].date} ${model[index].time}");
+                             var date1 = DateFormat('dd-MM-yyy hh:mm a').parse(AppCubit.get(context).formattedDate!);
+                             var date2 = DateFormat('dd-MM-yyy hh:mm a').parse("${model[index].date} ${model[index].time}");
+                             print("Days : ${date1.difference(date2).inDays}");
+                             print("Hours : ${date1.difference(date2).inHours /24}");
+                             print("Min : ${date1.difference(date2).inMinutes / 60}");
+                             print("sec : ${date1.difference(date2).inMinutes % 60}");
+                             // print("diff in d : ${diff.inDays/30}");
                           },
-                          itemKey: Key(model[index].id.toString()),
+                          child: EventListBuild(
+                            model: model[index],
+                            onDismissed: (onDismissed) {
+                              setState(() {
+                                Fluttertoast.showToast(
+                                    msg: "${model[index].event} deleted ",
+                                    backgroundColor: redC,
+                                    fontSize: 20);
+                                bloc.deleteEvent(id: model[index].id);
+                                bloc.eventsList.removeAt(index);
+                              });
+                            },
+                            itemKey: Key(model[index].id.toString()),
+                          ),
                         )),
               ],
             ),

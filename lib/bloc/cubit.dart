@@ -147,4 +147,17 @@ class AppCubit extends Cubit<AppStates> {
   String formatDateTime(DateTime dateTime) {
     return DateFormat('hh:mm').format(dateTime);
   }
+
+  var now = DateTime.now();
+  var endTime ;
+  var diff ;
+
+
+ checkTime({enTime}){
+   diff = now.difference(enTime).inDays;
+   print(diff);
+ }
+  DateTime myDate = DateTime. now();
+  String? formattedDate ;
+
 }
