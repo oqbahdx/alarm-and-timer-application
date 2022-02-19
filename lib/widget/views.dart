@@ -2,11 +2,13 @@ import 'package:alert/bloc/cubit.dart';
 import 'package:alert/model/events_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../config/theme.dart';
 
 class ColumnBuild extends StatefulWidget {
-  const ColumnBuild({Key? key}) : super(key: key);
+  ColumnBuild({Key? key, required this.model}) : super(key: key);
+  final EventsModel model;
 
   @override
   _ColumnBuildState createState() => _ColumnBuildState();
@@ -15,9 +17,17 @@ class ColumnBuild extends StatefulWidget {
 class _ColumnBuildState extends State<ColumnBuild> {
   @override
   Widget build(BuildContext context) {
+    var date1 = DateFormat('dd-MM-yyy hh:mm a')
+        .parse(AppCubit.get(context).formattedDate!);
+    var date2 = DateFormat('dd-MM-yyy hh:mm a')
+        .parse("${widget.model.date} ${widget.model.time}");
+    var days = date2.difference(date1).inDays;
+    var hours = date2.difference(date1).inHours / 24;
+    var minus = date2.difference(date1).inMinutes / 60;
+    var sec = date2.difference(date1).inSeconds % 60;
     return Column(
       children: [
-        textBuild(txt: 'Mom Birthday', color: greyC, size: 20),
+        textBuild(txt: widget.model.event.toString(), color: greyC, size: 20),
         const SizedBox(
           height: 30,
         ),
@@ -26,25 +36,25 @@ class _ColumnBuildState extends State<ColumnBuild> {
           children: [
             Column(
               children: [
-                textBuild(txt: '14', color: greyC, size: 40),
+                textBuild(txt: days.toStringAsFixed(0), color: greyC, size: 40),
                 textBuild(txt: 'Days', color: greyC, size: 20),
               ],
             ),
             Column(
               children: [
-                textBuild(txt: '15', color: greyC, size: 40),
+                textBuild(txt: hours.toStringAsFixed(0), color: greyC, size: 40),
                 textBuild(txt: 'Hours', color: greyC, size: 20),
               ],
             ),
             Column(
               children: [
-                textBuild(txt: '35', color: greyC, size: 40),
-                textBuild(txt: 'Mins', color: greyC, size: 20),
+                textBuild(txt: minus.toStringAsFixed(0), color: greyC, size: 40),
+                textBuild(txt: 'Minus', color: greyC, size: 20),
               ],
             ),
             Column(
               children: [
-                textBuild(txt: '15', color: greyC, size: 40),
+                textBuild(txt: sec.toStringAsFixed(0), color: greyC, size: 40),
                 textBuild(txt: 'Sec', color: greyC, size: 20),
               ],
             ),
@@ -94,9 +104,18 @@ class _EventListBuildState extends State<EventListBuild> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
-            Icon(Icons.delete,size: 50,color: Colors.white,),
-            Icon(Icons.delete,size: 50,color: Colors.white,)
-          ],),
+              Icon(
+                Icons.delete,
+                size: 50,
+                color: Colors.white,
+              ),
+              Icon(
+                Icons.delete,
+                size: 50,
+                color: Colors.white,
+              )
+            ],
+          ),
         ),
         key: widget.itemKey,
         direction: DismissDirection.horizontal,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
+import 'package:alert/model/events_model.dart';
 import 'package:alert/screen/events_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       },
       builder: (context, state) {
         var bloc = AppCubit.get(context);
+        var model = AppCubit.get(context).eventsList;
         return Scaffold(
           key: _key,
           backgroundColor: blackC,
@@ -80,9 +82,14 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 50,
                   ),
-                  const SizedBox(
+                   SizedBox(
                     height: 160,
-                    child: ColumnBuild(),
+                    child: model.isNotEmpty?ColumnBuild(model: model[0]): Center(
+                      child: Text('No Event Yet',style: TextStyle(
+                          color: greyC, fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),),
+                    ),
                   ),
                   Center(
                     child: Row(

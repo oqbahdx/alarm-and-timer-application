@@ -64,9 +64,9 @@ class _EventsPageState extends State<EventsPage> {
                              var date1 = DateFormat('dd-MM-yyy hh:mm a').parse(AppCubit.get(context).formattedDate!);
                              var date2 = DateFormat('dd-MM-yyy hh:mm a').parse("${model[index].date} ${model[index].time}");
                              print("Days : ${date1.difference(date2).inDays}");
-                             print("Hours : ${date1.difference(date2).inHours /24}");
-                             print("Min : ${date1.difference(date2).inMinutes / 60}");
-                             print("sec : ${date1.difference(date2).inMinutes % 60}");
+                             print("Hours : ${date1.difference(date2).inHours}");
+                             print("Min : ${date1.difference(date2).inMinutes}");
+                             print("sec : ${date1.difference(date2).inMinutes}");
                              // print("diff in d : ${diff.inDays/30}");
                           },
                           child: EventListBuild(
