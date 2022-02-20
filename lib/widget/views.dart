@@ -21,10 +21,10 @@ class _ColumnBuildState extends State<ColumnBuild> {
         .parse(AppCubit.get(context).formattedDate!);
     var date2 = DateFormat('dd-MM-yyy hh:mm a')
         .parse("${widget.model.date} ${widget.model.time}");
-    var days = date2.difference(date1).inDays;
-    var hours = date2.difference(date1).inHours / 24;
-    var minus = date2.difference(date1).inMinutes / 60;
-    var sec = date2.difference(date1).inSeconds % 60;
+    var days = date1.difference(date2).inDays;
+    var hours = date1.difference(date2).inHours;
+    var minus = date1.difference(date2).inMinutes ;
+    var sec = date2.difference(date1).inSeconds  ;
     return Column(
       children: [
         textBuild(txt: widget.model.event.toString(), color: greyC, size: 20),
@@ -36,7 +36,7 @@ class _ColumnBuildState extends State<ColumnBuild> {
           children: [
             Column(
               children: [
-                textBuild(txt: days.toStringAsFixed(0), color: greyC, size: 40),
+                textBuild(txt: days.abs().toString(), color: greyC, size: 40),
                 textBuild(txt: 'Days', color: greyC, size: 20),
               ],
             ),
