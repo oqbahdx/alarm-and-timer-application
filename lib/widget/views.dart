@@ -1,5 +1,6 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/model/events_model.dart';
+import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,12 @@ class ColumnBuild extends StatefulWidget {
 }
 
 class _ColumnBuildState extends State<ColumnBuild> {
+  final CustomTimerController _controller = CustomTimerController();
+  @override
+  void initState() {
+    super.initState();
+    _controller.start();
+  }
   @override
   Widget build(BuildContext context) {
     var date1 = DateFormat('dd-MM-yyy hh:mm a')
@@ -25,41 +32,56 @@ class _ColumnBuildState extends State<ColumnBuild> {
     var hours = date1.difference(date2).inHours;
     var minus = date1.difference(date2).inMinutes ;
     var sec = date2.difference(date1).inSeconds  ;
+    Duration duration = Duration(
+      days: days.abs(),
+      hours: (minus/720).abs().toInt(),
+      minutes: (minus/720).abs().toInt(),
+      seconds: (sec/86400).abs().toInt()
+    );
     return Column(
       children: [
         textBuild(txt: widget.model.event.toString(), color: greyC, size: 20),
         const SizedBox(
           height: 30,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              children: [
-                textBuild(txt: days.abs().toString(), color: greyC, size: 40),
-                textBuild(txt: 'Days', color: greyC, size: 20),
-              ],
-            ),
-            Column(
-              children: [
-                textBuild(txt: hours.toStringAsFixed(0), color: greyC, size: 40),
-                textBuild(txt: 'Hours', color: greyC, size: 20),
-              ],
-            ),
-            Column(
-              children: [
-                textBuild(txt: minus.toStringAsFixed(0), color: greyC, size: 40),
-                textBuild(txt: 'Minus', color: greyC, size: 20),
-              ],
-            ),
-            Column(
-              children: [
-                textBuild(txt: sec.toStringAsFixed(0), color: greyC, size: 40),
-                textBuild(txt: 'Sec', color: greyC, size: 20),
-              ],
-            ),
-          ],
-        )
+        CustomTimer(
+          controller: _controller,
+            begin:duration,
+            end: const Duration(),
+            onChangeState: (CustomTimerState state) {
+            },
+            builder: (remaining) {
+              return  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    children: [
+                      textBuild(txt: remaining.days, color: greyC, size: 40),
+                      textBuild(txt: 'Days', color: greyC, size: 20),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      textBuild(txt:remaining.hours, color: greyC, size: 40),
+                      textBuild(txt: 'Hours', color: greyC, size: 20),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      textBuild(txt:remaining.minutes, color: greyC, size: 40),
+                      textBuild(txt: 'Minus', color: greyC, size: 20),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      textBuild(txt:remaining.seconds, color: greyC, size: 40),
+                      textBuild(txt: 'Sec', color: greyC, size: 20),
+                    ],
+                  ),
+                ],
+              );
+            }),
+
       ],
     );
   }

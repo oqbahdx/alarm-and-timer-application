@@ -5,6 +5,8 @@ import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/model/events_model.dart';
 import 'package:alert/screen/events_list.dart';
+import 'package:alert/screen/timer_page.dart';
+import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,7 +49,9 @@ class _HomePageState extends State<HomePage> {
       listener: (context, state) {
         if (state is InsertDataSuccessState) {
           Fluttertoast.showToast(
-              msg: 'New Alarm Saved', backgroundColor: Colors.teal,fontSize: 20);
+              msg: 'New Alarm Saved',
+              backgroundColor: Colors.teal,
+              fontSize: 20);
         }
       },
       builder: (context, state) {
@@ -82,23 +86,32 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 50,
                   ),
-                   SizedBox(
+                  SizedBox(
                     height: 160,
-                    child: model.isNotEmpty?ColumnBuild(model: model[0]): Center(
-                      child: Text('No Event Yet',style: TextStyle(
-                          color: greyC, fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      ),),
-                    ),
+                    child: model.isNotEmpty
+                        ? ColumnBuild(model: model[0])
+                        : Center(
+                            child: Text(
+                              'No Event Yet',
+                              style: TextStyle(
+                                  color: greyC,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                   ),
                   Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Icon(
-                          Icons.access_time_filled,
-                          color: greyC,
-                        ),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const TimerPage()));
+                            },
+                            icon: Icon(Icons.access_time_filled, color: greyC)),
                         InkWell(
                           onTap: () async {
                             setState(() {
@@ -206,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                   height: 0.0,
                 ),
           floatingActionButton: _open
-              ? bloc.newTime  == null
+              ? bloc.newTime == null
                   ? FloatingActionButton(
                       backgroundColor: blackC,
                       onPressed: () {

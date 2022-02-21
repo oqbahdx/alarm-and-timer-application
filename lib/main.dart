@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: TimerPage.id,
+        initialRoute: HomePage.id,
         routes: {
           HomePage.id: (context) => const HomePage(),
           EventsPage.id: (context) => const EventsPage(),

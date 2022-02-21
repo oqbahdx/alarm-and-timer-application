@@ -24,8 +24,9 @@ class _TimerPageState extends State<TimerPage> {
   Duration selectedValue = const Duration(
     hours: 0,
     minutes: 0,
+    seconds: 0
   );
-
+ bool showTimer = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,49 +44,84 @@ class _TimerPageState extends State<TimerPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const SizedBox(
-            height: 15,
-          ),
-          CustomTimer(
-              controller: _controller,
-              begin: const Duration(seconds: 5),
-              end: const Duration(),
-              onChangeState: (CustomTimerState state) {
-                if (_controller.state == CustomTimerState.finished) {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const TimerAlarmPage()));
-                  _controller.reset();
-                }
-              },
-              builder: (remaining) {
-                return Text(
-                    "${remaining.hours} : ${remaining.minutes} : ${remaining.seconds}",
-                    style: const TextStyle(
-                        fontSize: 35.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold));
-              }),
-          const SizedBox(height: 24.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          showTimer == false? Column(
             children: [
-              RoundedButton(
-                text: "Start",
-                color: Colors.green,
-                onPressed: () => _controller.start(),
+              CupertinoTimerPicker(
+                backgroundColor: greyC,
+                onTimerDurationChanged: (value){
+                  setState(() {
+                    selectedValue = value;
+                  });
+
+                },
               ),
-              RoundedButton(
-                text: "Pause",
-                color: Colors.blue,
-                onPressed: () => _controller.pause(),
-              ),
-              RoundedButton(
-                text: "Reset",
-                color: Colors.red,
-                onPressed: () => _controller.reset(),
-              ),
+             SizedBox(height: 70,),
+             InkWell(
+               onTap: (){
+                 setState(() {
+                   showTimer = true;
+                   _controller.start();
+                 });
+               },
+               child: Container(
+                 height: 100,
+                 width: 100,
+                 decoration: BoxDecoration(
+                   color: Colors.teal,
+                   borderRadius: BorderRadius.circular(100)
+                 ),
+                 child: const Center(
+                   child: Icon(Icons.add,size: 60,),
+                 ),
+               ),
+             ),
             ],
-          )
+          ):Column(
+            children: [
+              CustomTimer(
+                  controller: _controller,
+                  begin:selectedValue,
+                  end: const Duration(),
+                  onChangeState: (CustomTimerState state) {
+                    if (_controller.state == CustomTimerState.finished) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const TimerAlarmPage()));
+                      _controller.reset();
+                    }
+                  },
+                  builder: (remaining) {
+                    return Text(
+                        "${remaining.hours} : ${remaining.minutes} : ${remaining.seconds}",
+                        style: const TextStyle(
+                            fontSize: 35.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold));
+                  }),
+              const SizedBox(height: 24.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+
+                  RoundedButton(
+                    text: "Pause",
+                    color: Colors.blue,
+                    onPressed: () => _controller.pause(),
+                  ),
+                  RoundedButton(
+                    text: "Close",
+                    color: Colors.red,
+                    onPressed: () {
+                      setState(() {
+                        showTimer = false;
+                       _controller.reset;
+                      });
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+
         ],
       ),
     );
