@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:alert/bloc/states.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/model/events_model.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
@@ -159,5 +163,27 @@ class AppCubit extends Cubit<AppStates> {
  }
   DateTime myDate = DateTime. now();
   String? formattedDate ;
-
+  AudioPlayer player = AudioPlayer();
+  Future playRing() async {
+    String audioasset = "assets/ring.mp3";
+    ByteData bytes = await rootBundle.load(audioasset); //load sound from assets
+    Uint8List soundbytes =
+    bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+    int result = await player.playBytes(soundbytes);
+    if (result == 1) {
+      //play success
+      print("Sound playing successful.");
+    } else {
+      print("Error while playing sound.");
+    }
+  }
+  Future stopRing() async {
+    int result = await player.stop();
+    if (result == 1) {
+      //stop success
+      print("Sound playing stopped successfully.");
+    } else {
+      print("Error on while stopping sound.");
+    }
+  }
 }

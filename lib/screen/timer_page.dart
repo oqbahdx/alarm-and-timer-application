@@ -1,8 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:alert/config/theme.dart';
+import 'package:alert/screen/timer_alarm.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../widget/Containers_widget.dart';
 
 class TimerPage extends StatefulWidget {
   const TimerPage({Key? key}) : super(key: key);
@@ -14,7 +21,11 @@ class TimerPage extends StatefulWidget {
 
 class _TimerPageState extends State<TimerPage> {
   final CustomTimerController _controller = CustomTimerController();
-  Duration selectedValue = Duration(hours:0, minutes: 0,);
+  Duration selectedValue = const Duration(
+    hours: 0,
+    minutes: 0,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,21 +43,20 @@ class _TimerPageState extends State<TimerPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          CupertinoTimerPicker(
-              backgroundColor: Colors.white10,
-               mode: CupertinoTimerPickerMode.hm,
-              onTimerDurationChanged: (value){
-
-           setState(() {
-             selectedValue = value;
-             print(selectedValue.toString());
-           });
-          }),
-          const SizedBox(height: 15,),
+          const SizedBox(
+            height: 15,
+          ),
           CustomTimer(
               controller: _controller,
-              begin:  selectedValue,
+              begin: const Duration(seconds: 5),
               end: const Duration(),
+              onChangeState: (CustomTimerState state) {
+                if (_controller.state == CustomTimerState.finished) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const TimerAlarmPage()));
+                  _controller.reset();
+                }
+              },
               builder: (remaining) {
                 return Text(
                     "${remaining.hours} : ${remaining.minutes} : ${remaining.seconds}",
@@ -73,7 +83,7 @@ class _TimerPageState extends State<TimerPage> {
                 text: "Reset",
                 color: Colors.red,
                 onPressed: () => _controller.reset(),
-              )
+              ),
             ],
           )
         ],
@@ -82,25 +92,8 @@ class _TimerPageState extends State<TimerPage> {
   }
 }
 
-class RoundedButton extends StatelessWidget {
-  final String text;
-  final Color color;
-  final void Function()? onPressed;
 
-  RoundedButton({required this.text, required this.color, this.onPressed});
 
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      child: Text(text, style: const TextStyle(color: Colors.white)),
-      style: TextButton.styleFrom(
-        backgroundColor: color,
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      ),
-      onPressed: onPressed,
-    );
-  }
-}
+
+
 

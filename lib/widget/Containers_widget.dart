@@ -162,3 +162,24 @@ class MenuBuild extends StatelessWidget {
   }
 }
 
+class RoundedButton extends StatelessWidget {
+  final String text;
+  final Color color;
+  final void Function()? onPressed;
+
+  RoundedButton({required this.text, required this.color, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      child: Text(text, style: const TextStyle(color: Colors.white)),
+      style: TextButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
