@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../config/theme.dart';
 
 class PickContainer extends StatefulWidget {
-  const PickContainer({Key? key, required this.text, required this.onTap}) : super(key: key);
+  const PickContainer({Key? key, required this.text, required this.onTap})
+      : super(key: key);
 
   final String text;
   final Function() onTap;
@@ -57,26 +58,30 @@ class DeleteIcon extends StatelessWidget {
 }
 
 class WatchContainer extends StatelessWidget {
-  const WatchContainer({Key? key,
-    required this.dayText,
-    required this.watchDate,required this.watchText}) : super(key: key);
+  const WatchContainer(
+      {Key? key,
+      required this.dayText,
+      required this.watchDate,
+      required this.watchText,
+      required this.alarm})
+      : super(key: key);
   final String watchDate;
   final String watchText;
   final String dayText;
+  final Widget alarm;
+
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 50.0,
       color: watchC,
       shadowColor: Colors.white24,
-      shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(100)),
+      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(100)),
       child: Container(
         height: 250,
         width: 250,
         decoration: BoxDecoration(
-            color: blackC,
-            borderRadius: BorderRadius.circular(100)),
+            color: blackC, borderRadius: BorderRadius.circular(100)),
         child: Center(
           child: Column(
             children: [
@@ -85,7 +90,8 @@ class WatchContainer extends StatelessWidget {
               ),
               Text(
                 dayText,
-                style: TextStyle(fontSize: 15, color: greyC,fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 15, color: greyC, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 10,
@@ -93,9 +99,7 @@ class WatchContainer extends StatelessWidget {
               Text(
                 watchDate,
                 style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: greyC),
+                    fontSize: 15, fontWeight: FontWeight.bold, color: greyC),
               ),
               const SizedBox(
                 height: 30,
@@ -103,28 +107,12 @@ class WatchContainer extends StatelessWidget {
               Text(
                 watchText,
                 style: TextStyle(
-                    fontSize: 70,
-                    color: greyC,
-                    fontWeight: FontWeight.w900),
+                    fontSize: 70, color: greyC, fontWeight: FontWeight.w900),
               ),
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                '09:00',
-                style: TextStyle(
-                  fontSize: 15,
-                  color: greyC,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Icon(
-                Icons.alarm,
-                color: redC,
-              )
+              alarm
             ],
           ),
         ),
@@ -141,8 +129,7 @@ class MenuBuild extends StatelessWidget {
     return Card(
       shadowColor: Colors.white24,
       elevation: 50.0,
-      shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15)),
+      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
       child: Container(
         child: Center(
           child: Icon(
@@ -165,21 +152,33 @@ class MenuBuild extends StatelessWidget {
 class RoundedButton extends StatelessWidget {
   final String text;
   final Color color;
+  final Color fontColor;
   final void Function()? onPressed;
 
-  RoundedButton({required this.text, required this.color, this.onPressed});
+  RoundedButton(
+      {required this.text,
+      required this.color,
+      this.onPressed,
+      required this.fontColor});
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      child: Text(text, style: const TextStyle(color: Colors.white)),
-      style: TextButton.styleFrom(
-        backgroundColor: color,
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+    return Card(
+      elevation: 20.0,
+      color: blackC,
+      shadowColor: Colors.white24,
+      child: TextButton(
+        child: Text(text,
+            style: TextStyle(
+                color: fontColor, fontSize: 22, fontWeight: FontWeight.bold)),
+        style: TextButton.styleFrom(
+          backgroundColor: color,
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        ),
+        onPressed: onPressed,
       ),
-      onPressed: onPressed,
     );
   }
 }

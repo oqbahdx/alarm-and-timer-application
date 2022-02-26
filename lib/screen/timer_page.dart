@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widget/Containers_widget.dart';
 
@@ -46,32 +47,50 @@ class _TimerPageState extends State<TimerPage> {
         children: <Widget>[
           showTimer == false? Column(
             children: [
-              CupertinoTimerPicker(
-                backgroundColor: greyC,
-                onTimerDurationChanged: (value){
-                  setState(() {
-                    selectedValue = value;
-                  });
+              CupertinoTheme(
+                data: const CupertinoThemeData(
+                  brightness:  Brightness.dark,
+                ),
+                child: CupertinoTimerPicker(
+                  backgroundColor: blackC,
+                  onTimerDurationChanged: (value){
+                    setState(() {
+                      selectedValue = value;
+                    });
 
-                },
+                  },
+                ),
               ),
-             SizedBox(height: 70,),
+             const SizedBox(height: 70,),
              InkWell(
                onTap: (){
-                 setState(() {
-                   showTimer = true;
-                   _controller.start();
-                 });
+                 if(selectedValue.inHours == 0 &&selectedValue.inMinutes == 0&&selectedValue.inSeconds == 0){
+                   Fluttertoast.showToast(msg: "Please pick a time",textColor: Colors.red);
+                 }else{
+                   setState(() {
+                     showTimer = true;
+                     _controller.start();
+                   });
+                 }
+
                },
-               child: Container(
-                 height: 100,
-                 width: 100,
-                 decoration: BoxDecoration(
-                   color: Colors.teal,
-                   borderRadius: BorderRadius.circular(100)
+               child: Card(
+                 elevation: 20.0,
+                 shadowColor: Colors.white24,
+                 color: blackC,
+                 shape: OutlineInputBorder(
+                   borderRadius: BorderRadius.circular(100),
                  ),
-                 child: const Center(
-                   child: Icon(Icons.add,size: 60,),
+                 child: Container(
+                   height: 100,
+                   width: 100,
+                   decoration: BoxDecoration(
+                     color: blackC,
+                     borderRadius: BorderRadius.circular(100)
+                   ),
+                   child: Center(
+                     child: Icon(Icons.add,size: 60,color: greyC,),
+                   ),
                  ),
                ),
              ),
@@ -104,12 +123,20 @@ class _TimerPageState extends State<TimerPage> {
 
                   RoundedButton(
                     text: "Pause",
-                    color: Colors.blue,
+                    fontColor: Colors.grey,
+                    color: blackC,
                     onPressed: () => _controller.pause(),
                   ),
                   RoundedButton(
+                    text: "Resume",
+                    fontColor: Colors.teal,
+                    color: blackC,
+                    onPressed: () => _controller.start(),
+                  ),
+                  RoundedButton(
+                    fontColor: redC,
                     text: "Close",
-                    color: Colors.red,
+                    color: blackC,
                     onPressed: () {
                       setState(() {
                         showTimer = false;

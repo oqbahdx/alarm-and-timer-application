@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     day = DateFormat('EEEE').format(now);
-    AppCubit.get(context).createDatabase();
+
     AppCubit.get(context).timeString =
         AppCubit.get(context).formatDateTime(DateTime.now());
     Timer.periodic(const Duration(seconds: 1),
@@ -82,23 +82,40 @@ class _HomePageState extends State<HomePage> {
                     dayText: day.toString(),
                     watchText: '${AppCubit.get(context).timeString}',
                     watchDate: '${now.day}-${now.month}-${now.year}',
+                    alarm: model.isEmpty ?Container():Column(children: [
+                      Text(
+                        model[0].time.toString(),
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: greyC,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Icon(
+                        Icons.alarm,
+                        color: redC,
+                      )
+                    ],),
                   ),
                   const SizedBox(
                     height: 50,
                   ),
                   SizedBox(
                     height: 160,
-                    child: model.isNotEmpty
-                        ? ColumnBuild(model: model[0])
-                        : Center(
-                            child: Text(
-                              'No Event Yet',
-                              style: TextStyle(
-                                  color: greyC,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                    child: bloc.eventsList.isEmpty
+                        ? Center(
+                      child: Text(
+                        'No Event Yet',
+                        style: TextStyle(
+                            color: greyC,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                        : ColumnBuild(model: model[0])
                   ),
                   Center(
                     child: Row(

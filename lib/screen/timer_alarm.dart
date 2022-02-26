@@ -1,5 +1,6 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/config/theme.dart';
+import 'package:alert/screen/home.dart';
 import 'package:flutter/material.dart';
 
 class TimerAlarmPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _TimerAlarmPageState extends State<TimerAlarmPage> {
             InkWell(
               onTap: (){
                 AppCubit.get(context).stopRing();
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const HomePage()));
               },
               child: Container(
                 height: 110,

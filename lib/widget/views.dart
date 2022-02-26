@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import '../config/theme.dart';
 
 class ColumnBuild extends StatefulWidget {
-  ColumnBuild({Key? key, required this.model}) : super(key: key);
+  const ColumnBuild({Key? key, required this.model}) : super(key: key);
   final EventsModel model;
 
   @override
@@ -49,6 +49,10 @@ class _ColumnBuildState extends State<ColumnBuild> {
             begin:duration,
             end: const Duration(),
             onChangeState: (CustomTimerState state) {
+            if(_controller.state == CustomTimerState.finished){
+              AppCubit.get(context).playRing();
+            }
+
             },
             builder: (remaining) {
               return  Row(
