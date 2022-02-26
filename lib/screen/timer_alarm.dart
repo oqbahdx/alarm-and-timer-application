@@ -1,6 +1,7 @@
 import 'package:alert/bloc/cubit.dart';
 import 'package:alert/config/theme.dart';
 import 'package:alert/screen/home.dart';
+import 'package:alert/screen/timer_page.dart';
 import 'package:flutter/material.dart';
 
 class TimerAlarmPage extends StatefulWidget {
@@ -11,12 +12,13 @@ class TimerAlarmPage extends StatefulWidget {
 }
 
 class _TimerAlarmPageState extends State<TimerAlarmPage> {
+
   @override
   void initState() {
-
     super.initState();
     AppCubit.get(context).playRing();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,24 +27,28 @@ class _TimerAlarmPageState extends State<TimerAlarmPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          const  Text(
+            const Text(
               'Timer Is Finished',
               style: TextStyle(
-                  color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 150,
             ),
             InkWell(
-              onTap: (){
+              onTap: () {
                 AppCubit.get(context).stopRing();
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>const HomePage()));
+                Route route = MaterialPageRoute(builder: (context) => const TimerPage());
+
+                Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
               },
               child: Container(
                 height: 110,
                 width: 110,
                 child: const Center(
-                  child:  Icon(
+                  child: Icon(
                     Icons.close,
                     color: Colors.white,
                     size: 50,

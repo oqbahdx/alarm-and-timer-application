@@ -32,6 +32,10 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool _open = false;
 
+
+  String formatDateTime(DateTime dateTime) {
+    return DateFormat('hh:mm').format(dateTime);
+  }
   @override
   void initState() {
     super.initState();
