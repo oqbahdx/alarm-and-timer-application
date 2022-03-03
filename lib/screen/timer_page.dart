@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widget/Containers_widget.dart';
@@ -110,8 +111,15 @@ class _TimerPageState extends State<TimerPage> {
                         controller: _controller,
                         begin: selectedValue,
                         end: const Duration(),
-                        onChangeState: (CustomTimerState state) {
+                        onChangeState: (CustomTimerState state) async{
                           if (_controller.state == CustomTimerState.finished) {
+                            const androidConfig = FlutterBackgroundAndroidConfig(
+                                notificationTitle: "oqbah alarm  app",
+                                notificationText: "Background notification for keeping the example app running in the background",
+                                notificationImportance: AndroidNotificationImportance.Default,
+                                notificationIcon: AndroidResource(name: 'background_icon', defType: 'drawable'));
+                            bool success = await FlutterBackground.initialize(androidConfig: androidConfig);
+                            FlutterBackground.enableBackgroundExecution();
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const TimerAlarmPage()));
                             _controller.reset();

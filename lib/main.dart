@@ -5,9 +5,11 @@ import 'package:alert/screen/home.dart';
 import 'package:alert/screen/timer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_background/flutter_background.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterBackground.initialize();
   runApp(const MyApp());
 }
 
