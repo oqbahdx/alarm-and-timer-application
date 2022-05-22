@@ -1,6 +1,7 @@
 # alert
 
-A new Flutter project.
+An alarm clock and a timer application 
+you enter the time and date and stored them in the local database (sqflite)  .
 
 ## Getting Started
 
